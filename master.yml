@@ -1,0 +1,16 @@
+---
+
+- name: This is master playbook
+  hosts: test
+  gather_facts: true
+  become: true
+  connection: ssh
+  roles:
+
+    - docker
+    - jenkins
+#    - sonar 
+
+
+# run this playbook use below command
+# ansible-playbook -i hosts master.yml

@@ -1,0 +1,51 @@
+---
+# tasks file for docker
+
+- name: Check host distribution
+  debug:
+    msg: "Distribution is {{ ansible_distribution }}"
+
+- name: Update docker server
+  apt:
+    update_cache: yes
+
+- name: Install ca-certificates curl
+  apt:
+    name:
+      - ca-certificates
+      - curl
+
+- name: Create Docker keyrings directory
+  file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755'
+
+- name: Add Docker's official GPG key
+  get_url:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    dest: /etc/apt/keyrings/docker.asc
+
+- name: Set permissions for Docker GPG key (docker.asc)
+  file:
+    path: /etc/apt/keyrings/docker.asc
+    mode: '0644'
+
+- name: Add the repository to Apt sources
+  shell: echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+- name: Update docker server
+  apt:
+    update_cache: yes
+
+- name: Install the Docker packages
+  apt: name={{ item }} state=latest
+  with_items:
+    - docker-ce
+    - docker-ce-cli
+    - containerd.io
+    - docker-buildx-plugin
+    - docker-compose-plugin
+
+- name: Add docker user on sudo group
+  shell: sudo usermod -aG docker $USER
