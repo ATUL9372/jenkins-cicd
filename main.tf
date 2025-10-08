@@ -21,4 +21,4 @@ resource "aws_key_pair" "own_ssh_key"{
     public_key = "${var.public_ssh_key}"
 }
 
-resource "aws_security_group" "" 
+resource "aws_security_group" "local_security_group" 
