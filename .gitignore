@@ -1,6 +1,6 @@
 ## ignore everything start with .* format
 
-*.terraform.lock.hcl
+.terraform.lock.hcl
 *.log
 terraform.tfstate
 .terraform/
